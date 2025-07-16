@@ -2,35 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>NEC Phishing Detection Dashboard</title>
+    <title>Vodacom Phishing Detection Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background: #f8f9fa; }
-        .navbar { background: #d2691e; }
+        .navbar { background: #e60000; }
         .navbar-brand img { height: 48px; }
         .hero {
-            background: #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            padding: 2rem;
+            position: relative;
+            background: url('https://pbs.twimg.com/media/E4QwQwQXwAAVg6d?format=jpg&name=large') center/cover no-repeat;
+            min-height: 260px;
+            border-radius: 1rem;
+            margin-top: 1.5rem;
             margin-bottom: 2rem;
-            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             display: flex;
             align-items: center;
+            justify-content: flex-start;
         }
-        .hero-img {
-            width: 300px;
-            height: 200px;
-            background: #eee;
-            border-radius: 1rem;
-            margin-right: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .hero-overlay {
+            background: rgba(230,0,0,0.7);
+            color: #fff;
+            padding: 2.5rem 3rem;
+            border-radius: 1rem 0 0 1rem;
+            min-width: 350px;
         }
-        .hero-img img {
-            max-width: 90%;
-            max-height: 180px;
-            display: block;
+        .hero-logo {
+            position: absolute;
+            top: 24px;
+            right: 32px;
+            background: #fff;
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+        .nav-tabs .nav-link.active {
+            background: #e60000;
+            color: #fff;
+        }
+        .nav-tabs .nav-link {
+            color: #e60000;
         }
         .section-card {
             background: #fff;
@@ -39,79 +51,101 @@
             padding: 2rem;
             margin-bottom: 2rem;
         }
-        .table thead { background: #d2691e; color: #fff; }
+        .table thead { background: #e60000; color: #fff; }
         .alert-phishing { background: #fff3cd; }
+        .footer {
+            background: #e60000;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0 0.5rem 0;
+            margin-top: 2rem;
+            border-radius: 1rem 1rem 0 0;
+        }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="https://www.tume.go.tz/assets/images/logo.png" alt="NEC Logo">
-            NEC Phishing Detection
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Vodacom_logo.svg" alt="Vodacom Logo" style="background:#fff; border-radius:8px; padding:2px;">
+            Vodacom Phishing Detection
         </a>
-        <form class="d-flex ms-auto" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-light" type="submit">Search</button>
-        </form>
     </div>
 </nav>
-<div class="container mt-4">
-    <div class="hero mb-4">
-        <div class="hero-img">
-            <img src="/static/National_Electoral_Commission_(Tanzania)_Logo.png" alt="NEC Group Photo" />
+<div class="container">
+    <div class="hero">
+        <div class="hero-overlay">
+            <h2 class="mb-2"><i class="fa-solid fa-shield-halved"></i> Vodacom Tanzania PLC</h2>
+            <h4 class="mb-2">AI-Driven Phishing & SMS Threat Detection</h4>
+            <p class="lead">Protecting Vodacom's communications with real-time AI-powered security.</p>
         </div>
-        <div>
-            <h2 class="mb-2">JAMHURI YA MUUNGANO WA TANZANIA<br><span class="text-success">TUME HURU YA TAIFA YA UCHAGUZI</span></h2>
-            <p class="lead">AI-Driven Phishing and SMS Threat Detection Dashboard for NEC</p>
+        <div class="hero-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Vodacom_logo.svg" alt="Vodacom Logo" height="64">
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
+    <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="submit-tab" data-bs-toggle="tab" data-bs-target="#submit" type="button" role="tab" aria-controls="submit" aria-selected="true"><i class="fa-solid fa-paper-plane"></i> Submit Message</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="alerts-tab" data-bs-toggle="tab" data-bs-target="#alerts" type="button" role="tab" aria-controls="alerts" aria-selected="false"><i class="fa-solid fa-triangle-exclamation"></i> Phishing Alerts</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="false"><i class="fa-solid fa-list"></i> All Messages</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="dashboardTabsContent">
+        <div class="tab-pane fade show active" id="submit" role="tabpanel" aria-labelledby="submit-tab">
             <div class="section-card">
-                <h4>Submit a New Message for Detection</h4>
-                <form action="/process" method="post" class="mb-3">
-                    <div class="mb-2">
+                <h4><i class="fa-solid fa-paper-plane"></i> Submit a New Message for Detection</h4>
+                <form action="/process" method="post" class="row g-3">
+                    <div class="col-md-6">
                         <label class="form-label">Sender</label>
-                        <input type="text" name="sender" class="form-control">
+                        <input type="text" name="sender" class="form-control" placeholder="e.g. +255712345678 or Vodacom" required>
                     </div>
-                    <div class="mb-2">
+                    <div class="col-md-12">
                         <label class="form-label">Message</label>
-                        <input type="text" name="message" class="form-control" size="80">
+                        <textarea name="message" class="form-control" rows="3" placeholder="Paste the SMS or email content here..." required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Check Message</button>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-danger"><i class="fa-solid fa-magnifying-glass"></i> Check Message</button>
+                    </div>
                 </form>
             </div>
+        </div>
+        <div class="tab-pane fade" id="alerts" role="tabpanel" aria-labelledby="alerts-tab">
             <div class="section-card">
-                <h4>Flagged Phishing Alerts</h4>
+                <h4><i class="fa-solid fa-triangle-exclamation"></i> Flagged Phishing Alerts</h4>
                 <table class="table table-bordered table-hover">
-                    <thead><tr><th>ID</th><th>Sender</th><th>Message</th><th>Probability</th><th>Timestamp</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Sender</th><th>Message</th><th>Probability</th><th>Timestamp</th><th>Details</th></tr></thead>
                     <tbody>
                     {% for alert in alerts %}
                     <tr class="alert-phishing">
                         <td>{{ alert['id'] }}</td>
                         <td>{{ alert['sender'] }}</td>
-                        <td>{{ alert['message'] }}</td>
+                        <td>{{ alert['message'][:40] }}{% if alert['message']|length > 40 %}...{% endif %}</td>
                         <td>{{ '%.2f'|format(alert['probability']) }}</td>
                         <td>{{ alert['timestamp'] }}</td>
+                        <td><button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#detailsModal" data-id="{{ alert['id'] }}" data-sender="{{ alert['sender'] }}" data-message="{{ alert['message'] }}" data-probability="{{ '%.2f'|format(alert['probability']) }}" data-timestamp="{{ alert['timestamp'] }}"><i class="fa-solid fa-eye"></i></button></td>
                     </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
             <div class="section-card">
-                <h4>All Messages (from CSV)</h4>
+                <h4><i class="fa-solid fa-list"></i> All Messages (from CSV)</h4>
                 <table class="table table-bordered table-hover">
-                    <thead><tr><th>ID</th><th>Sender</th><th>Message</th><th>Timestamp</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Sender</th><th>Message</th><th>Timestamp</th><th>Details</th></tr></thead>
                     <tbody>
                     {% for idx, row in messages %}
                     <tr>
                         <td>{{ row['id'] }}</td>
                         <td>{{ row['sender'] }}</td>
-                        <td>{{ row['message'] }}</td>
+                        <td>{{ row['message'][:40] }}{% if row['message']|length > 40 %}...{% endif %}</td>
                         <td>{{ row['timestamp'] }}</td>
+                        <td><button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#detailsModal" data-id="{{ row['id'] }}" data-sender="{{ row['sender'] }}" data-message="{{ row['message'] }}" data-timestamp="{{ row['timestamp'] }}"><i class="fa-solid fa-eye"></i></button></td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -119,6 +153,42 @@
             </div>
         </div>
     </div>
+    <!-- Modal for message details -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detailsModalLabel">Message Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group">
+              <li class="list-group-item"><strong>ID:</strong> <span id="modal-id"></span></li>
+              <li class="list-group-item"><strong>Sender:</strong> <span id="modal-sender"></span></li>
+              <li class="list-group-item"><strong>Message:</strong> <span id="modal-message"></span></li>
+              <li class="list-group-item"><strong>Probability:</strong> <span id="modal-probability"></span></li>
+              <li class="list-group-item"><strong>Timestamp:</strong> <span id="modal-timestamp"></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer mt-5">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Vodacom_logo.svg" alt="Vodacom Logo" height="32" class="me-2">
+        &copy; {{ year or 2025 }} Vodacom Tanzania PLC. All rights reserved.
+    </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var detailsModal = document.getElementById('detailsModal');
+    detailsModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget;
+      document.getElementById('modal-id').textContent = button.getAttribute('data-id') || '';
+      document.getElementById('modal-sender').textContent = button.getAttribute('data-sender') || '';
+      document.getElementById('modal-message').textContent = button.getAttribute('data-message') || '';
+      document.getElementById('modal-probability').textContent = button.getAttribute('data-probability') || 'N/A';
+      document.getElementById('modal-timestamp').textContent = button.getAttribute('data-timestamp') || '';
+    });
+</script>
 </body>
 </html> 
